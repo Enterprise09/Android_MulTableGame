@@ -5,10 +5,12 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,22 +24,23 @@ public class GameDisplay extends AppCompatActivity implements View.OnClickListen
     TextView question, input, correctAws;
     Button btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btn0, cancelBtn, enterBtn;
 
-    private static final Random random = new Random();
-    private static int num1, num2;
-    private static int ctn = 0;
+    private Random random = new Random();
+    private int num1, num2;
+    private int ctn = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        num1 = 2 + random.nextInt(9);   // 2 - 9
-        num2 = 1 + random.nextInt(9);   // 1 - 9
-
         progress = (ProgressBar) findViewById(R.id.progressBar);
         question = (TextView) findViewById(R.id.qustion);
+        randomQuestion();
+        question.setText(num1 + " * " + num2);
+
         input = (TextView) findViewById(R.id.input);
         correctAws = (TextView) findViewById(R.id.correctAnswer);
+        correctAws.setText(ctn + "");
 
         btn1 = (Button) findViewById(R.id.button);
         btn2 = (Button) findViewById(R.id.button2);
@@ -69,48 +72,61 @@ public class GameDisplay extends AppCompatActivity implements View.OnClickListen
 
     @Override
     public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.button:
+                input.append("1");
+                break;
+            case R.id.button2:
+                input.append("2");
+                break;
+            case R.id.button3:
+                input.append("3");
+                break;
+            case R.id.button4:
+                input.append("4");
+                break;
+            case R.id.button5:
+                input.append("5");
+                break;
+            case R.id.button6:
+                input.append("6");
+                break;
+            case R.id.button7:
+                input.append("7");
+                break;
+            case R.id.button8:
+                input.append("8");
+                break;
+            case R.id.button9:
+                input.append("9");
+                break;
+            case R.id.button0:
+                input.append("0");
+                break;
+            case R.id.enterBtn:
+                int correct = num1 * num2;
+                int ans = Integer.parseInt(input.getText().toString());
+                if (ans == correct){    //정답인지 판단
+                    ctn++;  //정답개수 증가
+                    correctAws.setText(ctn + "");
+                }
+                input.setText("");
+                randomQuestion();     //랜덤으로 문제 생성
+                break;
+            case R.id.cancelBtn:
+                input.setText("");
+                break;
+        }
+    }
 
-        if (btn1.equals(v.getResources())){
-            input.append("1");
-        }
-        else if(btn2.equals(v.getResources())){
-            input.append("2");
-        }
-        else if(btn3.equals(v.getResources())){
-            input.append("3");
-        }
-        else if(btn4.equals(v.getResources())){
-            input.append("4");
-        }
-        else if(btn5.equals(v.getResources())){
-            input.append("5");
-        }
-        else if(btn6.equals(v.getResources())){
-            input.append("6");
-        }
-        else if(btn7.equals(v.getResources())){
-            input.append("7");
-        }
-        else if(btn8.equals(v.getResources())){
-            input.append("8");
-        }
-        else if(btn9.equals(v.getResources())){
-            input.append("9");
-        }
-        else if(btn0.equals(v.getResources())){
-            input.append("0");
-        }
-        else if(cancelBtn.equals(v.getResources())){
-            input.setText("");
-        }
-        else if(enterBtn.equals(v.getResources())){
-            int correct = num1 * num2;
-            if (Integer.valueOf(input.getText().toString()) == correct){
-                ctn++;
-                correctAws.setText("정답 개수란 : " + ctn + "개");
-            }
-        }
+    public int randomQuestion(){    //랜덤으로 문제 생성 후 화면에 출력
+        num1 = 2 + random.nextInt(9);   // 2 - 9
+        num2 = 1 + random.nextInt(9);   // 1 - 9
 
+        //문제 생성하여 화면에 출력
+        question.setText(num1 + " * " + num2);
+
+        return num1*num2;
     }
 
     @Override
@@ -127,7 +143,11 @@ public class GameDisplay extends AppCompatActivity implements View.OnClickListen
                 Intent i = new Intent(this, MainActivity.class);
                 i.putExtra("count", ctn);
                 startActivity(i);
+            case R.id.restart:
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
+
+
 }

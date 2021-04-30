@@ -7,8 +7,8 @@
         />
 
     <item
-        android:title="CLEAR"
-        android:id="@+id/clear"
+        android:title="RESTART"
+        android:id="@+id/restart"
         />
 
 </menu>

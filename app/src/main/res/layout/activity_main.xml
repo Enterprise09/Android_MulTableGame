@@ -18,21 +18,18 @@
             android:id="@+id/qustion"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="문제란"
             android:textSize="25dp"/>
 
         <TextView
             android:id="@+id/input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="입력란"
             android:textSize="25dp" />
 
         <TextView
             android:id="@+id/correctAnswer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="정답개수란"
             android:textSize="25dp" />
 
         <ProgressBar
