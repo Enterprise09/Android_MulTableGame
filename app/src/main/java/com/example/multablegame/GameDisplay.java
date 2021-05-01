@@ -140,9 +140,10 @@ public class GameDisplay extends AppCompatActivity implements View.OnClickListen
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
             case R.id.exit:
-                Intent i = new Intent(this, MainActivity.class);
+                Intent i = getIntent();
                 i.putExtra("count", ctn);
-                startActivity(i);
+                setResult(RESULT_OK, i);
+                finish();
             case R.id.restart:
                 break;
         }
