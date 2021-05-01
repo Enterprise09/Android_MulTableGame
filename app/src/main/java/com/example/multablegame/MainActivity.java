@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
     ListView list;
     int count;
-    ArrayList<String> items;
+    ArrayList<String> items; 
     ArrayAdapter adapter;
 
     @Override
