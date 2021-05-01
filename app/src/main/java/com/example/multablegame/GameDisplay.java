@@ -2,6 +2,8 @@ package com.example.multablegame;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -23,17 +25,25 @@ public class GameDisplay extends AppCompatActivity implements View.OnClickListen
     ProgressBar progress;
     TextView question, input, correctAws;
     Button btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btn0, cancelBtn, enterBtn;
+    Runnable process, timer;
 
     private Random random = new Random();
     private int num1, num2;
     private int ctn = 0;
+    public static int s = 0;
+
+    Handler handler = new Handler();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        s = 0;
+        ctn = 0;
         progress = (ProgressBar) findViewById(R.id.progressBar);
+        progress.setMax(100);
+        progress.setProgress(0);
         question = (TextView) findViewById(R.id.qustion);
         randomQuestion();
         question.setText(num1 + " * " + num2);
@@ -68,6 +78,28 @@ public class GameDisplay extends AppCompatActivity implements View.OnClickListen
         cancelBtn.setOnClickListener(this);
         enterBtn.setOnClickListener(this);
 
+        process = new Runnable() {
+            @Override
+            public void run() {
+                progress.incrementProgressBy(1);
+                s++;
+                if(s < 100){
+                    handler.postDelayed(process, 600);      //600ms * 100 = 60000 >> 60Second >> 1Minute
+                }
+            }
+        };
+        handler.postDelayed(process, 600);
+
+        timer= new Runnable() {
+            @Override
+            public void run() {
+                Intent i = getIntent();
+                i.putExtra("count", ctn);
+                setResult(RESULT_OK, i);
+                finish();
+            }
+        };
+        handler.postDelayed(timer, 60000);
     }
 
     @Override
@@ -106,12 +138,12 @@ public class GameDisplay extends AppCompatActivity implements View.OnClickListen
             case R.id.enterBtn:
                 int correct = num1 * num2;
                 int ans = Integer.parseInt(input.getText().toString());
-                if (ans == correct){    //정답인지 판단
-                    ctn++;  //정답개수 증가
+                if (ans == correct){    //is this Correct?
+                    ctn++;  //Count Correct Answer
                     correctAws.setText(ctn + "");
                 }
                 input.setText("");
-                randomQuestion();     //랜덤으로 문제 생성
+                randomQuestion();
                 break;
             case R.id.cancelBtn:
                 input.setText("");
@@ -119,11 +151,11 @@ public class GameDisplay extends AppCompatActivity implements View.OnClickListen
         }
     }
 
-    public int randomQuestion(){    //랜덤으로 문제 생성 후 화면에 출력
-        num1 = 2 + random.nextInt(9);   // 2 - 9
-        num2 = 1 + random.nextInt(9);   // 1 - 9
+    public int randomQuestion(){    //Create Question
+        num1 = 1 + random.nextInt(9);
+        num2 = 1 + random.nextInt(9);
 
-        //문제 생성하여 화면에 출력
+        //Create the Question & Display
         question.setText(num1 + " * " + num2);
 
         return num1*num2;
@@ -143,12 +175,14 @@ public class GameDisplay extends AppCompatActivity implements View.OnClickListen
                 Intent i = getIntent();
                 i.putExtra("count", ctn);
                 setResult(RESULT_OK, i);
+                finish();       //Return to MainActivity with Result Code "RESULT_OK"
+                break;
+            case R.id.restart:  //End GameDisplay Activity & Return result RESULT_CANCELED
+                Intent r = new Intent(getApplicationContext(), GameDisplay.class);
+                setResult(RESULT_CANCELED);
                 finish();
-            case R.id.restart:
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
-
-
 }

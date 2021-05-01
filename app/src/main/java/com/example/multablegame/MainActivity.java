@@ -48,12 +48,14 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        int count = data.getIntExtra("count", -1);
         if(RESULT_OK == resultCode){
+            int count = data.getIntExtra("count", -1);
             items.add(count + "");
             adapter.notifyDataSetChanged();
+        }else if (RESULT_CANCELED == resultCode){   //Restart GameDisplay Activity
+            Intent r = new Intent(getApplicationContext(), GameDisplay.class);
+            startActivityForResult(r, START_GAME);
         }
-
         super.onActivityResult(requestCode, resultCode, data);
     }
 
