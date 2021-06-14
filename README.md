@@ -1,3 +1,6 @@
-# Android_Project
-#05.01 first push
-#Simple Multiplication Table Game
+# Android_MulableGame
+> 2021. 05. 01 Initialize
+
+Univercity 3rd Grade First Project for Report
+
+Simple Multiplication Table Game
